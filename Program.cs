@@ -1,183 +1,130 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tarea_1.DataAccess;
+using Tarea_1.Services;
 
 namespace Tarea_1
 {
     class Program
     {
-        public static NorthwindContext dataContext = new NorthwindContext();
+        #region Services
+        public static EmployeeService employeeService = new EmployeeService();
+        public static OrderService orderService = new OrderService();
+        public static ProductsService productsService = new ProductsService();
+        public static CustomerService customerService = new CustomerService();
+        public static SuppliersServices suppliersServices = new SuppliersServices();
+        #endregion
 
         #region Opciones
 
         public static void opcion_1()
         {
-            var emp = GetEmployees();
+            var emp = employeeService.GetEmployees();
             var output = emp.ToList();
-            var i = 0;
-            output.ForEach(f =>
-            {
-                i++;
-                Console.WriteLine("\nEmployeeID: " + f.EmployeeId +
-                                    "\nLastName: " + f.LastName +
-                                    "\nFirstName: " + f.FirstName +
-                                    "\nTitle: " + f.Title +
-                                    "\nTitleOfCourtesy: " + f.TitleOfCourtesy +
-                                    "\nBirthDate: " + f.BirthDate +
-                                    "\nHireDate: " + f.HireDate +
-                                    "\nAddress: " + f.Address +
-                                    "\nCity: " + f.City +
-                                    "\nRegion: " + f.Region +
-                                    "\nPostalCode: " + f.PostalCode +
-                                    "\nCountry: " + f.Country +
-                                    "\nHomePhone: " + f.HomePhone +
-                                    "\nExtension: " + f.Extension +
-                                    "\nPhoto: " + f.Photo +
-                                    "\nNotes: " + f.Notes +
-                                    "\nReportsTo: " + f.ReportsTo +
-                                    "\nPhotoPath: " + f.PhotoPath +
-                                    "\n");
-            });
+            employeeService.printAllEmployee(output);
         }
 
         public static void opcion_2()
         {
-            var emp = GetEmployees().Select(s => new
+            var cust = customerService.GetCustomersWhereCity();
+            var output = cust.ToList();
+            customerService.printAllCustomers(output);
+        }
+
+        public static void opcion_3()
+        {
+            var emp = employeeService.GetEmployees().Select(s => new
             {
                 s.Title,
                 s.FirstName,
                 s.LastName
             }).Where(w => w.Title == "Sales Representative");
             var output = emp.ToList();
-            var i = 0;
             output.ForEach(f =>
             {
-                i++;
-                Console.WriteLine("Empleado " + (i) +
-                                    "\nTitle: " + f.Title +
+                Console.WriteLine(  "\nTitle: " + f.Title +
                                     "\nFirstName: " + f.FirstName +
                                     "\nLastName: " + f.LastName +
                                     "\n");
             });
         }
 
-        public static void opcion_3()
+        public static void opcion_4()
         {
-            var emp = GetEmployees().Select(s => new
+            var emp = employeeService.GetEmployees().Select(s => new
             {
                 Nombre = s.FirstName,
                 Apellido = s.LastName,
                 Puesto = s.Title,
-            }).Where(w => w.Puesto != "Sales Representative");
+                City = s.City
+            }).Where(w => w.City == "London");
             var output = emp.ToList();
-            var i = 0;
             output.ForEach(f =>
             {
-                i++;
-                Console.WriteLine("Empleado " + (i) +
-                                    "\nNombre: " + f.Nombre +
+                Console.WriteLine(  "\nNombre: " + f.Nombre +
                                     "\nApellido: " + f.Apellido +
                                     "\nPuesto: " + f.Puesto +
+                                    "\nCity: " + f.City + 
                                     "\n");
             });
         }
 
-        public static void opcion_4(int orderID = 10248)
+        public static void opcion_5(string customerID = "SPLIR")
         {
-            var qry = GetOrderByID(orderID).Select(s => new
+            var emp = orderService.GetOrderByCustomerID(customerID).Select(s => new
             {
                 Cliente = s.Customer.CompanyName,
                 Vendedor = s.Employee.FirstName,
-                Productos = s.OrderDetails.Select(se => se.Product.ProductName)
+                Productos = s.OrderDetails.Select(se => se.Product.ProductName),
             });
-            var output = qry.ToList();
+            var output = emp.ToList();
             output.ForEach(f =>
             {
-                Console.WriteLine("\nCliente: " + f.Cliente +
+                Console.WriteLine(  "\nCliente: " + f.Cliente +
                                     "\nVendedor: " + f.Vendedor +
-                                    "\nPuesto: " + f.Productos +
+                                    "\nProducto: " + f.Productos +
                                     "\n");
             });
         }
 
-
-        public static void opcion_5(int id = 1)
+        public static void opcion_6(int id = 1)
         {
-            UpdateEmployeeById(id);
+            employeeService.UpdateEmployeeById(id);
         }
 
-        public static void opcion_6()
+        public static void opcion_7()
         {
-            AddProduct("Jugo del Valle 1lt", 15.50m);
+            productsService.AddProduct("Chocolate", 49.99m, 100, 100);
         }
         
-        public static void opcion_7(int id)
+        public static void opcion_8(int id = 2)
         {
-            BorrarEmployee(id);
+            employeeService.BorrarEmployee(id);
         }
-
-        #endregion
-
-        #region Refector Methods
-        private static IQueryable<Employees> GetEmployees()
+        
+        public static void opcion_9()
         {
-            return dataContext.Employees.Select(s => s);
+            suppliersServices.UpdateSupplierByCompanyName();
         }
-
-        private static Employees GetEmployeeID(int id)
-        {
-            return GetEmployees().Where(w => w.EmployeeId == id).FirstOrDefault();
-        }
-
-        private static void AddProduct(string productName, decimal unitPrice)
-        {
-            var newProduct = new Products();
-            newProduct.ProductName = productName;
-            newProduct.UnitPrice = unitPrice;
-            dataContext.Products.Add(newProduct);
-            dataContext.SaveChanges();
-        }
-
-        private static void BorrarEmployee(int id)
-        {
-            var emp = GetEmployeeID(id);
-            dataContext.Employees.Remove(emp);
-            dataContext.SaveChanges();
-        }
-
-        private static IQueryable<Orders> GetOrderByID(int orderID)
-        {
-            return dataContext.Orders.Where(w => w.OrderId == orderID);
-        }
-
-        private static void UpdateEmployeeById(int id)
-        {
-            Employees currentemp = GetEmployeeID(id);
-
-            if (currentemp == null)
-                throw new Exception("Empleado no encontrado");
-
-
-            currentemp.FirstName = "Alejandra";
-            dataContext.SaveChanges();
-        }
-
         #endregion
 
 
         static void Main(string[] args)
         {
             Console.Write("Que quiere hacer?\n" + 
-                              "1. Select Employee\n" + 
-                              "2. Select Employee Where Title == 'Sales Represnetative'\n" +
-                              "3. Aliases de Columna con Where Puesto != 'Sales Represnetative'\n" +
-                              "4. Obtener los productos, el cliente y el empleado por ID de Order\n" + 
-                              "5. Update Employee Where ID = 1\n" + 
-                              "6. Insertar Nuevo Producto\n" +
-                              "7. Borrar Empleado\n" + 
+                              "1. Select Employee\n" +
+                              "2. Select Customer Where City == Rio de Janeiro\n" + 
+                              "3. Select Employee Where Title == 'Sales Represnetative'\n" +
+                              "4. Aliases de Columna con Where Puesto != 'Sales Represnetative'\n" +
+                              "5. Obtener los productos, el cliente y el empleado por ID de Cliente\n" + 
+                              "6. Update Employee Where ID = 1\n" + 
+                              "7. Insertar Nuevo Producto\n" +
+                              "8. Borrar Empleado\n" + 
+                              "9. Update SupplierCompanyName\n" +
                               "Opcion: ");
-            string a = Console.ReadLine();
-            switch (a)
+            string opc = Console.ReadLine();
+            switch (opc)
             {
                 case "1":
                     opcion_1();
@@ -204,8 +151,17 @@ namespace Tarea_1
                     break;
 
                 case "7":
-                    //opcion_7(); No lo ejecuto porque no quiero afectar a la base actualmente
+                    opcion_7();
                     break;
+
+                case "8":
+                    //opcion_7(); No lo ejecuto porque no quiero afectar a la base actualmente que tengo
+                    break;
+
+                case "9":
+                    opcion_9();
+                    break;
+
                 default:
                     Console.WriteLine("Opcion invalida");
                     break;

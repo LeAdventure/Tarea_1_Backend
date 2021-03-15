@@ -8,6 +8,8 @@ namespace Tarea_1
     {
         public static NorthwindContext dataContext = new NorthwindContext();
 
+        #region Opciones
+
         public static void opcion_1()
         {
             var emp = GetEmployees();
@@ -98,23 +100,10 @@ namespace Tarea_1
             });
         }
 
-        
 
         public static void opcion_5(int id = 1)
         {
-            UpdateEmployee(id);
-        }
-
-        private static void UpdateEmployee(int id)
-        {
-            Employees currentemp = GetEmployeeID(id);
-
-            if (currentemp == null)
-                throw new Exception("Empleado no encontrado");
-
-
-            currentemp.FirstName = "Alejandra";
-            dataContext.SaveChanges();
+            UpdateEmployeeById(id);
         }
 
         public static void opcion_6()
@@ -127,6 +116,7 @@ namespace Tarea_1
             BorrarEmployee(id);
         }
 
+        #endregion
 
         #region Refector Methods
         private static IQueryable<Employees> GetEmployees()
@@ -160,8 +150,20 @@ namespace Tarea_1
             return dataContext.Orders.Where(w => w.OrderId == orderID);
         }
 
+        private static void UpdateEmployeeById(int id)
+        {
+            Employees currentemp = GetEmployeeID(id);
+
+            if (currentemp == null)
+                throw new Exception("Empleado no encontrado");
+
+
+            currentemp.FirstName = "Alejandra";
+            dataContext.SaveChanges();
+        }
 
         #endregion
+
 
         static void Main(string[] args)
         {

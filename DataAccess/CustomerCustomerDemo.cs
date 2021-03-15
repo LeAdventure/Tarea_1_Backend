@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
 
 namespace Tarea_1.DataAccess
 {
@@ -10,7 +12,7 @@ namespace Tarea_1.DataAccess
         public string CustomerId { get; set; }
         public string CustomerTypeId { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual CustomerDemographic CustomerType { get; set; }
+        public virtual Customers Customer { get; set; }
+        public virtual CustomerDemographics CustomerType { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ird+ZLTaowWbVbinRPkquil8r0bpVR5uLklFPmeqPFilOozRfS+Z/SZhwE5cHAbiuIqwwC1La2ioV70epoWEDg==",
+  "dgSpecHash": "sqmv028Ry91iiWzaTb7khn7Lck0uL5CVziWlZYDm/v1VNlhJ9ffnJ2YS9HSz/f8L+mw2s17JgxqL6o7Tz0/Mvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sebas\\Desktop\\Semestre 6\\Desarrollo Web Backend\\Tarea_1\\Tarea_1.csproj",
+  "projectFilePath": "C:\\Users\\sebas\\Desktop\\Semestre 6\\Desarrollo Web Backend\\C#\\Tarea_1_Backend\\Tarea_1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sebas\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\sebas\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.1\\microsoft.bcl.hashcode.1.1.1.nupkg.sha512",

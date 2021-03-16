@@ -8,7 +8,7 @@ namespace Tarea_1.Services
 {
     public class EmployeeService : NorthWindService
     {
-        public void printAllEmployee(List<Employees> output)
+        public void printAllFromEmployee(List<Employees> output)
         {
             output.ForEach(f =>
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tarea_1.DataAccess;
+using Tarea_1.Models;
 
 namespace Tarea_1.Services
 {
@@ -39,14 +40,19 @@ namespace Tarea_1.Services
             return dataContext.Employees.Select(s => s);
         }
 
-        public Employees GetEmployeeID(int id)
+        public Employees GetEmployeeByID(int id)
         {
-            return GetEmployees().Where(w => w.EmployeeId == id).FirstOrDefault();
+            var employee = GetEmployees().Where(w => w.EmployeeId == id).FirstOrDefault();
+
+            if (employee == null)
+                throw new Exception("El id solicitado no existe");
+
+            return employee;
         }
 
-        public void BorrarEmployee(int id)
+        public void BorrarEmployeeByID(int id)
         {
-            var emp = GetEmployeeID(id);
+            var emp = GetEmployeeByID(id);
 
             dataContext.Employees.Remove(emp);
             dataContext.SaveChanges();
@@ -54,7 +60,7 @@ namespace Tarea_1.Services
 
         public void UpdateEmployeeById(int id)
         {
-            Employees currentemp = GetEmployeeID(id);
+            Employees currentemp = GetEmployeeByID(id);
 
             if (currentemp == null)
                 throw new Exception("Empleado no encontrado");
@@ -66,7 +72,29 @@ namespace Tarea_1.Services
             dataContext.SaveChanges();
         }
 
-        
 
+
+
+        //Tarea_3
+        public void AddEmployee(EmployeeModel newEmployee)
+        {
+            var newEmployeeRegister = new Employees()
+            {
+                FirstName = newEmployee.Name,
+                LastName = newEmployee.Surname
+            };
+
+            dataContext.Employees.Add(newEmployeeRegister);
+            dataContext.SaveChanges();
+        }
+
+        public void UpdateEmployee(int id, EmployeeModel employeeForUpdate)
+        {
+            var currentemployee = GetEmployeeByID(id);
+            currentemployee.FirstName = employeeForUpdate.Name;
+            currentemployee.LastName = employeeForUpdate.Surname;
+            dataContext.SaveChanges();
+        }
+        
     }
 }

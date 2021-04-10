@@ -6,7 +6,6 @@ namespace Tarea_1
 {
     class Program
     {
-        
         static void Main(string[] args)
         {
             var opcSelector = new OptionsService();

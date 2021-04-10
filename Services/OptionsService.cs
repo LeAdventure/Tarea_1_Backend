@@ -7,11 +7,11 @@ namespace Tarea_1.Services
 {
     public class OptionsService 
     {
-        public static EmployeeService employeeService = new EmployeeService();
-        public static OrderService orderService = new OrderService();
-        public static ProductsService productsService = new ProductsService();
-        public static CustomerService customerService = new CustomerService();
-        public static SuppliersServices suppliersServices = new SuppliersServices();
+        public EmployeeService employeeService = new EmployeeService();
+        public OrderService orderService = new OrderService();
+        public ProductsService productsService = new ProductsService();
+        public CustomerService customerService = new CustomerService();
+        public SuppliersServices suppliersServices = new SuppliersServices();
 
         public void opcion_1()
         {
@@ -95,7 +95,7 @@ namespace Tarea_1.Services
 
         public void opcion_8(int id = 2)
         {
-            employeeService.BorrarEmployee(id);
+            employeeService.BorrarEmployeeByID(id);
         }
 
         public void opcion_9()
